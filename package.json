@@ -1,0 +1,21 @@
+{
+  "name": "nodete",
+  "version": "0.0.1",
+  "description": "Visualizer in networking",
+  "main": "main.js",
+  "author": "André Pettersson",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "devDependencies": {
+    "electron": "^4.1.4",
+    "electron-builder": "^20.39.0",
+    "electron-packager": "^13.1.1",
+    "electron-rebuild": "^1.8.4"
+  },
+  "dependencies": {
+    "sqlite3": "^4.0.6"
+  }
+}

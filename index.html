@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>nodete</title>
+    <script>
+        if (typeof module === 'object') { window.module = module; module = undefined; }
+    </script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/cytoscape.min.js"></script>
+    <script>if (window.module) module = window.module;</script>
+    <style>
+        #cy {
+            width: 1420px;
+            height: 700px;
+            display: block;
+            margin: auto;
+            border: 0.5px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cy"></div>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
