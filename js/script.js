@@ -4,6 +4,12 @@ function updateInTraffic(node, interface, traffic) {
 
 }
 
+function addNode(ip, hostname){
+  ipcRenderer.send('addNode', '{"status":"REQ", "ip":"'+ip+'", "hostname":"'+hostname+'"}');
+  cy.add({group: 'nodes', data: {id:hostname}, position: {x:100, y:300}});
+  cy.style().selector("#" + hostname).style('label', hostname).update();
+}
+
 function saveVisual(){
   ipcRenderer.send('saveVisual', '{"status":"REQ", "cyjson":'+JSON.stringify(cy.json())+'}');
 }
