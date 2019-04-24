@@ -12,9 +12,10 @@ function addNode(ip, hostname){
 }
 
 function addLink(source, target, source_int, target_int){
+  ipcRenderer.send('addLink', '{"status":"REQ", "source":"'+source+'", "target":"'+target+'", "source_int":"'+source_int+'", "target_int":"'+target_int+'"}');
   var id = source + "-" + source_int + "_" + target + "-" + target_int;
   cy.add({group: 'edges', data: { id: id, source: source, target: target }});
-  cy.style().selector("#" + id).style('line-color', "green").style("source-label", "In 0Mbit/s").style("target-label", "In 0Mbit/s").style("source-text-offset", "47px").style("target-text-offset", "47px").style("text-background-color", "black").style("text-background-opacity", "1").style("text-background-padding", "1px").style("color", "white").update();
+  cy.style().selector("#" + id).style('line-color', "green").style("source-label", "0Mbit/s").style("target-label", "0Mbit/s").style("source-text-offset", "47px").style("target-text-offset", "47px").style("text-background-color", "black").style("text-background-opacity", "1").style("text-background-padding", "1px").style("color", "white").update();
   saveVisual();
 }
 
@@ -22,6 +23,13 @@ function deleteNode(hostname){
   ipcRenderer.send('deleteNode', '{"status":"REQ", "hostname":"'+hostname+'"}');
   cy.remove("#"+hostname);
   saveVisual();
+}
+
+function deleteLink(hostname, interface){
+  //cy.remove("#"+link);
+  saveVisual();
+  //interface = interface.replace("/", "--");
+  ipcRenderer.send('deleteLink', '{"status":"REQ", "hostname":"'+hostname+'", "interface":"'+interface+'"}');
 }
 
 function saveVisual(){
