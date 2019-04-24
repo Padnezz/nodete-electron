@@ -19,3 +19,14 @@ ipcMain.on('addNode', (event, arg) => {
         });
     }
 });
+
+ipcMain.on('deleteNode', (event, arg) => {
+    var parseArg = JSON.parse(arg);
+    if (parseArg.status == "REQ") {
+        db.run(`DELETE FROM nodes WHERE hostname = ?`, [parseArg.hostname], function(err) {
+            if (err) {
+              console.error(err.message);
+            }
+        });
+    }
+});

@@ -8,6 +8,20 @@ function addNode(ip, hostname){
   ipcRenderer.send('addNode', '{"status":"REQ", "ip":"'+ip+'", "hostname":"'+hostname+'"}');
   cy.add({group: 'nodes', data: {id:hostname}, position: {x:100, y:300}});
   cy.style().selector("#" + hostname).style('label', hostname).update();
+  saveVisual();
+}
+
+function addLink(source, target, source_int, target_int){
+  var id = source + "-" + source_int + "_" + target + "-" + target_int;
+  cy.add({group: 'edges', data: { id: id, source: source, target: target }});
+  cy.style().selector("#" + id).style('line-color', "green").style("source-label", "In 0Mbit/s").style("target-label", "In 0Mbit/s").style("source-text-offset", "47px").style("target-text-offset", "47px").style("text-background-color", "black").style("text-background-opacity", "1").style("text-background-padding", "1px").style("color", "white").update();
+  saveVisual();
+}
+
+function deleteNode(hostname){
+  ipcRenderer.send('deleteNode', '{"status":"REQ", "hostname":"'+hostname+'"}');
+  cy.remove("#"+hostname);
+  saveVisual();
 }
 
 function saveVisual(){
