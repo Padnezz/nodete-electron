@@ -12,6 +12,8 @@ function addNode(ip, hostname){
 }
 
 function addLink(source, target, source_int, target_int){
+  source_int = source_int.replace("/", "--");
+  target_int = target_int.replace("/", "--");
   ipcRenderer.send('addLink', '{"status":"REQ", "source":"'+source+'", "target":"'+target+'", "source_int":"'+source_int+'", "target_int":"'+target_int+'"}');
   var id = source + "-" + source_int + "_" + target + "-" + target_int;
   cy.add({group: 'edges', data: { id: id, source: source, target: target }});

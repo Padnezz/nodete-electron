@@ -68,7 +68,7 @@ ipcMain.on('deleteLink', (event, arg) => {
               console.error(err.message);
             } else {
                 if(rows != undefined){
-                    delete_row = row.id;
+                    delete_row = rows.id;
                 }
             }
         });
@@ -83,10 +83,13 @@ ipcMain.on('deleteLink', (event, arg) => {
             }
         });
 
-        db.run(`DELETE FROM links WHERE id = ?`, [delete_row], function(err) {
+        db.run(`DELETE FROM links WHERE id = ` + delete_row, [], function(err) {
             if (err) {
               console.error(err.message);
             }
+            console.log(delete_row);
+            console.log(this.lastID);
+            console.log(this.changes);
         });
     }
 });
