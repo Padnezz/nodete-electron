@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 const { ipcMain } = require('electron');
 let db;
-
+sqlite3.verbose()
 db = new sqlite3.Database('./db/nodete.db', (err) => {
     if (err) {
         console.error(err.message); 
@@ -61,7 +61,6 @@ ipcMain.on('addLink', (event, arg) => {
 
 ipcMain.on('deleteLink', (event, arg) => {
     var parseArg = JSON.parse(arg);
-    var delete_row;
     if (parseArg.status == "REQ") {
         db.get(`SELECT * FROM links WHERE source = ? AND source_int = ?`, [parseArg.hostname, parseArg.interface], function(err, rows) {
             if (err) {
@@ -69,6 +68,13 @@ ipcMain.on('deleteLink', (event, arg) => {
             } else {
                 if(rows != undefined){
                     delete_row = rows.id;
+                    db.run(`DELETE FROM links WHERE source = ? AND source_int = ?`, [rows.source, rows.source_int], function(err) {
+                        if (err) {
+                          console.error(err.message);
+                        } else {
+                          event.sender.send('deleteLink', '{"status":"ACK", "id":"' + rows.source + "-" + rows.source_int + "_" + rows.target + "-" + rows.target_int + '"}');
+                        }
+                    });
                 }
             }
         });
@@ -77,19 +83,16 @@ ipcMain.on('deleteLink', (event, arg) => {
               console.error(err.message);
             } else {
                 if(rows != undefined){
-                    console.log(rows.id)
                     delete_row = rows.id;
+                    db.run(`DELETE FROM links WHERE target = ? AND target_int = ?`, [rows.target, rows.target_int], function(err) {
+                        if (err) {
+                          console.error(err.message);
+                        } else {
+                          event.sender.send('deleteLink', '{"status":"ACK", "id":"' + rows.source + "-" + rows.source_int + "_" + rows.target + "-" + rows.target_int + '"}');
+                        }
+                    });
                 }
             }
-        });
-
-        db.run(`DELETE FROM links WHERE id = ` + delete_row, [], function(err) {
-            if (err) {
-              console.error(err.message);
-            }
-            console.log(delete_row);
-            console.log(this.lastID);
-            console.log(this.changes);
         });
     }
 });

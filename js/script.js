@@ -22,15 +22,14 @@ function addLink(source, target, source_int, target_int){
 }
 
 function deleteNode(hostname){
+  //CheckLinks
   ipcRenderer.send('deleteNode', '{"status":"REQ", "hostname":"'+hostname+'"}');
   cy.remove("#"+hostname);
   saveVisual();
 }
 
 function deleteLink(hostname, interface){
-  //cy.remove("#"+link);
-  saveVisual();
-  //interface = interface.replace("/", "--");
+  interface = interface.replace("/", "--");
   ipcRenderer.send('deleteLink', '{"status":"REQ", "hostname":"'+hostname+'", "interface":"'+interface+'"}');
 }
 
@@ -48,6 +47,14 @@ ipcRenderer.on('startVisual', (event, arg) => {
       cy.style().selector("#"+row.hostname).style('label', row.hostname).update();
     });*/
     cy.json(parseArg.cyjson);
+  }
+});
+
+ipcRenderer.on('deleteLink', (event, arg) => {
+  var parseArg = JSON.parse(arg);
+  if(parseArg.status == "ACK"){
+    cy.remove("#"+parseArg.id);
+    saveVisual();
   }
 });
 
